@@ -1,0 +1,279 @@
+{
+  "$defs": {
+    "BuildRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "不可变版本标识，如 git:<sha> 或镜像 digest",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "BuildRef",
+      "type": "object"
+    },
+    "MetricCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "test_verdict": {
+          "anyOf": [
+            {
+              "const": "pass",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Verdict"
+        },
+        "metric": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric"
+        },
+        "op": {
+          "anyOf": [
+            {
+              "enum": [
+                "<=",
+                "<",
+                ">=",
+                ">",
+                "=="
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Op"
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Threshold"
+        },
+        "baseline": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Baseline"
+        },
+        "tolerance": {
+          "default": 0.0,
+          "title": "Tolerance",
+          "type": "number"
+        }
+      },
+      "title": "MetricCheck",
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "description": "可追溯来源：ref 形如 im:msg/123@v2、aone:X-1@7、path@commit。",
+      "properties": {
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "link": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Link"
+        }
+      },
+      "required": [
+        "ref"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    },
+    "Suite": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "cases": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Cases",
+          "type": "array"
+        },
+        "config": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Config",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Suite",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Id"
+    },
+    "intent": {
+      "title": "Intent",
+      "type": "string"
+    },
+    "build": {
+      "$ref": "#/$defs/BuildRef"
+    },
+    "suites": {
+      "items": {
+        "$ref": "#/$defs/Suite"
+      },
+      "minItems": 1,
+      "title": "Suites",
+      "type": "array"
+    },
+    "checks": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MetricCheck"
+      },
+      "title": "Checks",
+      "type": "array"
+    },
+    "expected_artifacts": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Expected Artifacts",
+      "type": "array"
+    },
+    "resources": {
+      "additionalProperties": true,
+      "default": {},
+      "title": "Resources",
+      "type": "object"
+    },
+    "defects": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Defects",
+      "type": "array"
+    },
+    "tasks": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Tasks",
+      "type": "array"
+    },
+    "requested_by": {
+      "title": "Requested By",
+      "type": "string"
+    },
+    "sources": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SourceRef"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created At"
+    }
+  },
+  "required": [
+    "intent",
+    "build",
+    "suites",
+    "requested_by"
+  ],
+  "title": "TestPlan",
+  "type": "object"
+}

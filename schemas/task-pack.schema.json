@@ -1,0 +1,589 @@
+{
+  "$defs": {
+    "AcceptanceItem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "check": {
+          "title": "Check",
+          "type": "string"
+        },
+        "mode": {
+          "default": "human",
+          "enum": [
+            "auto",
+            "human"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "rule": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rule"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "check"
+      ],
+      "title": "AcceptanceItem",
+      "type": "object"
+    },
+    "AcceptanceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "by": {
+          "title": "By",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "auto",
+            "human"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "accepted",
+            "rejected",
+            "pending"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "at",
+        "by",
+        "mode",
+        "decision"
+      ],
+      "title": "AcceptanceRecord",
+      "type": "object"
+    },
+    "AoneLink": {
+      "additionalProperties": false,
+      "description": "建立映射后，认领、期限、状态以 Aone 为准；Git 只保留上下文。",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "scope": {
+          "title": "Scope",
+          "type": "string"
+        },
+        "linked_at": {
+          "format": "date-time",
+          "title": "Linked At",
+          "type": "string"
+        },
+        "op_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Op Id"
+        }
+      },
+      "required": [
+        "id",
+        "scope",
+        "linked_at"
+      ],
+      "title": "AoneLink",
+      "type": "object"
+    },
+    "Blocked": {
+      "additionalProperties": false,
+      "description": "附加标记：不改变所在阶段。",
+      "properties": {
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        },
+        "since": {
+          "format": "date-time",
+          "title": "Since",
+          "type": "string"
+        },
+        "by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "By"
+        },
+        "depends_on": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Depends On",
+          "type": "array"
+        },
+        "needs": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Need"
+          },
+          "title": "Needs",
+          "type": "array"
+        },
+        "unblock_when": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unblock When"
+        }
+      },
+      "required": [
+        "reason",
+        "since"
+      ],
+      "title": "Blocked",
+      "type": "object"
+    },
+    "Deliverable": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "code",
+            "test",
+            "decision",
+            "doc",
+            "data",
+            "other"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "link": {
+          "title": "Link",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "type",
+        "link"
+      ],
+      "title": "Deliverable",
+      "type": "object"
+    },
+    "Need": {
+      "additionalProperties": false,
+      "properties": {
+        "who": {
+          "title": "Who",
+          "type": "string"
+        },
+        "what": {
+          "title": "What",
+          "type": "string"
+        }
+      },
+      "required": [
+        "who",
+        "what"
+      ],
+      "title": "Need",
+      "type": "object"
+    },
+    "Participant": {
+      "additionalProperties": false,
+      "properties": {
+        "member": {
+          "pattern": "^m:[A-Za-z0-9_.\\-]+$",
+          "title": "Member",
+          "type": "string"
+        },
+        "role": {
+          "default": "contributor",
+          "enum": [
+            "lead",
+            "contributor",
+            "reviewer"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "since": {
+          "format": "date-time",
+          "title": "Since",
+          "type": "string"
+        }
+      },
+      "required": [
+        "member",
+        "since"
+      ],
+      "title": "Participant",
+      "type": "object"
+    },
+    "Rule": {
+      "additionalProperties": false,
+      "description": "可由程序判定的验收/阈值规则。\n\n- {test_verdict: pass}：关联的测试运行整体通过\n- {metric, op, threshold}：指标与固定阈值比较\n- {metric, op, baseline, tolerance}：与已批准基线比较，tolerance 为相对容差",
+      "properties": {
+        "test_verdict": {
+          "anyOf": [
+            {
+              "const": "pass",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Verdict"
+        },
+        "metric": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric"
+        },
+        "op": {
+          "anyOf": [
+            {
+              "enum": [
+                "<=",
+                "<",
+                ">=",
+                ">",
+                "=="
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Op"
+        },
+        "threshold": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Threshold"
+        },
+        "baseline": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Baseline"
+        },
+        "tolerance": {
+          "default": 0.0,
+          "title": "Tolerance",
+          "type": "number"
+        }
+      },
+      "title": "Rule",
+      "type": "object"
+    },
+    "SourceRef": {
+      "additionalProperties": false,
+      "description": "可追溯来源：ref 形如 im:msg/123@v2、aone:X-1@7、path@commit。",
+      "properties": {
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "link": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Link"
+        }
+      },
+      "required": [
+        "ref"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    },
+    "Stage": {
+      "enum": [
+        "clarifying",
+        "claimable",
+        "in_progress",
+        "in_review",
+        "done",
+        "cancelled"
+      ],
+      "title": "Stage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^P-\\d{8}-[0-9A-Z]{4}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "stage": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Stage"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "blocked": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Blocked"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "goal_refs": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Goal Refs",
+      "type": "array"
+    },
+    "aone": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AoneLink"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "coordinator": {
+      "anyOf": [
+        {
+          "pattern": "^m:[A-Za-z0-9_.\\-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Coordinator"
+    },
+    "acceptor": {
+      "anyOf": [
+        {
+          "pattern": "^m:[A-Za-z0-9_.\\-]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acceptor"
+    },
+    "participants": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Participant"
+      },
+      "title": "Participants",
+      "type": "array"
+    },
+    "skills_needed": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Skills Needed",
+      "type": "array"
+    },
+    "acceptance": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AcceptanceItem"
+      },
+      "title": "Acceptance",
+      "type": "array"
+    },
+    "deliverables": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Deliverable"
+      },
+      "title": "Deliverables",
+      "type": "array"
+    },
+    "evidence": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "acceptance_log": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/AcceptanceRecord"
+      },
+      "title": "Acceptance Log",
+      "type": "array"
+    },
+    "sources": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/SourceRef"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "tags": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "created_by": {
+      "title": "Created By",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "created_by",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "TaskPack",
+  "type": "object"
+}

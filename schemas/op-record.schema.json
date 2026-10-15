@@ -1,0 +1,312 @@
+{
+  "$defs": {
+    "Approval": {
+      "additionalProperties": false,
+      "properties": {
+        "by": {
+          "title": "By",
+          "type": "string"
+        },
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence"
+        }
+      },
+      "required": [
+        "by",
+        "at"
+      ],
+      "title": "Approval",
+      "type": "object"
+    },
+    "Attempt": {
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "started",
+            "executed",
+            "found_existing",
+            "failed",
+            "unknown",
+            "precondition_failed",
+            "deferred"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        }
+      },
+      "required": [
+        "run_id",
+        "at",
+        "outcome"
+      ],
+      "title": "Attempt",
+      "type": "object"
+    },
+    "Lease": {
+      "additionalProperties": false,
+      "properties": {
+        "holder": {
+          "title": "Holder",
+          "type": "string"
+        },
+        "acquired_at": {
+          "format": "date-time",
+          "title": "Acquired At",
+          "type": "string"
+        },
+        "until": {
+          "format": "date-time",
+          "title": "Until",
+          "type": "string"
+        }
+      },
+      "required": [
+        "holder",
+        "acquired_at",
+        "until"
+      ],
+      "title": "Lease",
+      "type": "object"
+    },
+    "Transition": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        },
+        "by": {
+          "title": "By",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "at",
+        "to",
+        "by"
+      ],
+      "title": "Transition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "op_id": {
+      "title": "Op Id",
+      "type": "string"
+    },
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "business_key": {
+      "additionalProperties": true,
+      "title": "Business Key",
+      "type": "object"
+    },
+    "params": {
+      "additionalProperties": true,
+      "title": "Params",
+      "type": "object"
+    },
+    "requested_by": {
+      "title": "Requested By",
+      "type": "string"
+    },
+    "on_behalf_of": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "On Behalf Of"
+    },
+    "preconditions": {
+      "additionalProperties": true,
+      "default": {},
+      "title": "Preconditions",
+      "type": "object"
+    },
+    "mode": {
+      "enum": [
+        "dry_run",
+        "confirm",
+        "auto"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "proposed",
+        "simulated",
+        "approved",
+        "leased",
+        "executed",
+        "verified",
+        "recorded",
+        "failed",
+        "needs_human",
+        "superseded"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    },
+    "lease": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Lease"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "attempts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Attempt"
+      },
+      "title": "Attempts",
+      "type": "array"
+    },
+    "approval": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Approval"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "receipt": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Receipt"
+    },
+    "observation": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Observation"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Note"
+    },
+    "history": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Transition"
+      },
+      "title": "History",
+      "type": "array"
+    }
+  },
+  "required": [
+    "op_id",
+    "kind",
+    "business_key",
+    "params",
+    "requested_by",
+    "mode",
+    "state",
+    "created_at",
+    "updated_at"
+  ],
+  "title": "OpRecord",
+  "type": "object"
+}

@@ -1,0 +1,48 @@
+{
+  "additionalProperties": false,
+  "description": "下游处理（视图、日报、任务联动）各自的水位线：已处理到的 Git commit。",
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Paths",
+      "type": "array"
+    },
+    "through_commit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Through Commit"
+    },
+    "updated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Updated At"
+    }
+  },
+  "required": [
+    "name",
+    "paths"
+  ],
+  "title": "ConsumerRecord",
+  "type": "object"
+}

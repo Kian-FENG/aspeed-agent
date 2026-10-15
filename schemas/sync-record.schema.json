@@ -1,0 +1,169 @@
+{
+  "$defs": {
+    "Gap": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "error": {
+          "title": "Error",
+          "type": "string"
+        },
+        "open": {
+          "default": true,
+          "title": "Open",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "at",
+        "error"
+      ],
+      "title": "Gap",
+      "type": "object"
+    },
+    "Lease": {
+      "additionalProperties": false,
+      "properties": {
+        "holder": {
+          "title": "Holder",
+          "type": "string"
+        },
+        "acquired_at": {
+          "format": "date-time",
+          "title": "Acquired At",
+          "type": "string"
+        },
+        "until": {
+          "format": "date-time",
+          "title": "Until",
+          "type": "string"
+        }
+      },
+      "required": [
+        "holder",
+        "acquired_at",
+        "until"
+      ],
+      "title": "Lease",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "source": {
+      "title": "Source",
+      "type": "string"
+    },
+    "scope": {
+      "title": "Scope",
+      "type": "string"
+    },
+    "mode": {
+      "default": "incremental",
+      "enum": [
+        "incremental",
+        "full"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "cursor": {
+      "additionalProperties": true,
+      "default": {},
+      "title": "Cursor",
+      "type": "object"
+    },
+    "overlap_seconds": {
+      "default": 600,
+      "title": "Overlap Seconds",
+      "type": "integer"
+    },
+    "last_attempt_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Attempt At"
+    },
+    "last_success_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Success At"
+    },
+    "last_reconcile_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Reconcile At"
+    },
+    "reconcile_summary": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reconcile Summary"
+    },
+    "lease": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Lease"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "gaps": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Gap"
+      },
+      "title": "Gaps",
+      "type": "array"
+    },
+    "stats": {
+      "additionalProperties": true,
+      "default": {},
+      "title": "Stats",
+      "type": "object"
+    }
+  },
+  "required": [
+    "source",
+    "scope"
+  ],
+  "title": "SyncRecord",
+  "type": "object"
+}

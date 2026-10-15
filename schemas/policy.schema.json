@@ -1,0 +1,343 @@
+{
+  "$defs": {
+    "Budget": {
+      "additionalProperties": false,
+      "properties": {
+        "max_external_writes_per_day": {
+          "default": 200,
+          "title": "Max External Writes Per Day",
+          "type": "integer"
+        },
+        "reminders_per_person_per_day": {
+          "default": 3,
+          "title": "Reminders Per Person Per Day",
+          "type": "integer"
+        },
+        "quiet_hours": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QuietHours"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": {
+            "start": "22:00",
+            "end": "08:30"
+          }
+        }
+      },
+      "title": "Budget",
+      "type": "object"
+    },
+    "DefectRules": {
+      "additionalProperties": false,
+      "properties": {
+        "scopes": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Scopes",
+          "type": "array"
+        },
+        "close_status": {
+          "default": "closed",
+          "title": "Close Status",
+          "type": "string"
+        },
+        "reopen_status": {
+          "default": "reopened",
+          "title": "Reopen Status",
+          "type": "string"
+        },
+        "due_soon_days": {
+          "default": 2,
+          "title": "Due Soon Days",
+          "type": "integer"
+        },
+        "escalate_after_days": {
+          "default": 3,
+          "title": "Escalate After Days",
+          "type": "integer"
+        },
+        "repeat_days": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "default": {
+            "missing_owner": 1,
+            "missing_due": 2,
+            "due_soon": 1,
+            "overdue": 1,
+            "overdue_escalate": 2,
+            "missing_verification": 1
+          },
+          "title": "Repeat Days",
+          "type": "object"
+        }
+      },
+      "title": "DefectRules",
+      "type": "object"
+    },
+    "Leases": {
+      "additionalProperties": false,
+      "properties": {
+        "op_seconds": {
+          "default": 600,
+          "title": "Op Seconds",
+          "type": "integer"
+        },
+        "sync_seconds": {
+          "default": 900,
+          "title": "Sync Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "Leases",
+      "type": "object"
+    },
+    "OpPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "confirm",
+          "title": "Mode",
+          "type": "string"
+        },
+        "approver_roles": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Approver Roles",
+          "type": "array"
+        }
+      },
+      "title": "OpPolicy",
+      "type": "object"
+    },
+    "QuietHours": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "default": "22:00",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "default": "08:30",
+          "title": "End",
+          "type": "string"
+        }
+      },
+      "title": "QuietHours",
+      "type": "object"
+    },
+    "SourceSync": {
+      "additionalProperties": false,
+      "properties": {
+        "overlap_seconds": {
+          "default": 600,
+          "title": "Overlap Seconds",
+          "type": "integer"
+        },
+        "page_size": {
+          "default": 50,
+          "title": "Page Size",
+          "type": "integer"
+        },
+        "reconcile_every_hours": {
+          "default": 24,
+          "title": "Reconcile Every Hours",
+          "type": "integer"
+        },
+        "stale_after_hours": {
+          "default": 6,
+          "title": "Stale After Hours",
+          "type": "integer"
+        },
+        "heartbeat_seconds": {
+          "default": 3600,
+          "title": "Heartbeat Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "SourceSync",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "timezone": {
+      "default": "Asia/Shanghai",
+      "title": "Timezone",
+      "type": "string"
+    },
+    "coordinators": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Coordinators",
+      "type": "array"
+    },
+    "sources": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "default": {},
+      "title": "Sources",
+      "type": "object"
+    },
+    "ops": {
+      "additionalProperties": {
+        "$ref": "#/$defs/OpPolicy"
+      },
+      "default": {
+        "default": {
+          "mode": "confirm",
+          "approver_roles": []
+        },
+        "im.remind": {
+          "approver_roles": [],
+          "mode": "dry_run"
+        },
+        "aone.create": {
+          "approver_roles": [
+            "coordinator"
+          ],
+          "mode": "confirm"
+        },
+        "aone.add_participant": {
+          "approver_roles": [],
+          "mode": "auto"
+        },
+        "aone.transition": {
+          "approver_roles": [
+            "coordinator",
+            "acceptor"
+          ],
+          "mode": "confirm"
+        },
+        "nm.submit": {
+          "approver_roles": [
+            "tester",
+            "coordinator"
+          ],
+          "mode": "confirm"
+        }
+      },
+      "title": "Ops",
+      "type": "object"
+    },
+    "budget": {
+      "$ref": "#/$defs/Budget",
+      "default": {
+        "max_external_writes_per_day": 200,
+        "reminders_per_person_per_day": 3,
+        "quiet_hours": {
+          "end": "08:30",
+          "start": "22:00"
+        }
+      }
+    },
+    "leases": {
+      "$ref": "#/$defs/Leases",
+      "default": {
+        "op_seconds": 600,
+        "sync_seconds": 900
+      }
+    },
+    "sync": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SourceSync"
+      },
+      "default": {
+        "default": {
+          "overlap_seconds": 600,
+          "page_size": 50,
+          "reconcile_every_hours": 24,
+          "stale_after_hours": 6,
+          "heartbeat_seconds": 3600
+        }
+      },
+      "title": "Sync",
+      "type": "object"
+    },
+    "defects": {
+      "$ref": "#/$defs/DefectRules",
+      "default": {
+        "scopes": [],
+        "close_status": "closed",
+        "reopen_status": "reopened",
+        "due_soon_days": 2,
+        "escalate_after_days": 3,
+        "repeat_days": {
+          "due_soon": 1,
+          "missing_due": 2,
+          "missing_owner": 1,
+          "missing_verification": 1,
+          "overdue": 1,
+          "overdue_escalate": 2
+        }
+      }
+    },
+    "stage_map": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object"
+      },
+      "default": {
+        "aone": {
+          "cancelled": "cancelled",
+          "closed": "done",
+          "fixed": "in_review",
+          "in_progress": "in_progress",
+          "open": "claimable",
+          "reopened": "claimable",
+          "verified": "done"
+        }
+      },
+      "title": "Stage Map",
+      "type": "object"
+    },
+    "failure_rules": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "default": {
+        "environment": [
+          "(?i)no space left",
+          "(?i)connection refused",
+          "(?i)device (not found|lost)",
+          "(?i)driver"
+        ],
+        "scheduling": [
+          "(?i)quota exceeded",
+          "(?i)queue timeout",
+          "(?i)preempted",
+          "(?i)no available node"
+        ]
+      },
+      "title": "Failure Rules",
+      "type": "object"
+    }
+  },
+  "title": "Policy",
+  "type": "object"
+}

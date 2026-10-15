@@ -1,0 +1,73 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "version_id": {
+      "title": "Version Id",
+      "type": "string"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Metrics",
+      "type": "object"
+    },
+    "from_run": {
+      "title": "From Run",
+      "type": "string"
+    },
+    "build": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Build"
+    },
+    "approved_by": {
+      "pattern": "^m:[A-Za-z0-9_.\\-]+$",
+      "title": "Approved By",
+      "type": "string"
+    },
+    "approved_at": {
+      "format": "date-time",
+      "title": "Approved At",
+      "type": "string"
+    },
+    "evidence": {
+      "title": "Evidence",
+      "type": "string"
+    },
+    "previous": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Previous"
+    }
+  },
+  "required": [
+    "name",
+    "version_id",
+    "metrics",
+    "from_run",
+    "approved_by",
+    "approved_at",
+    "evidence"
+  ],
+  "title": "Baseline",
+  "type": "object"
+}

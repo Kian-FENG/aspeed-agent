@@ -1,0 +1,16 @@
+input:
+  requester: m:carol
+  thread:
+    - {user: m:carol, text: "线上 llama-70b 的 P99 最近抖得厉害，从 110ms 涨到 160ms，SLA 要求 130ms"}
+    - {user: m:dave, text: "我怀疑是上周合入的调度改动，但没验证"}
+    - {user: m:alice, text: "这个值得开个任务，我来协调，Bob 做验收"}
+expect:
+  frontmatter:
+    coordinator: m:alice
+    acceptor: m:bob
+  stage_in: [claimable, clarifying]
+  sections_nonempty: [为什么做, 还不知道什么]
+  must_mention:
+    还不知道什么: ["调度"]        # 未验证的怀疑必须放在“还不知道什么”
+  must_not_mention:
+    已知什么: ["调度改动导致"]    # 不能把猜测写成事实

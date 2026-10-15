@@ -1,0 +1,33 @@
+# 团队规则。由人维护，随仓库版本化。未写出的字段使用代码中的默认值。
+version: 1
+timezone: Asia/Shanghai
+coordinators: []          # 默认协调人，例如 [m:alice]
+
+# 定时同步的来源与范围，例如 {aone: [proj-x], kb: [team-space], im: [chat-perf]}
+sources: {}
+
+# 每类外部写操作的执行模式：dry_run（只记录）| confirm（人工确认后执行）| auto
+ops:
+  default: {mode: confirm}
+  im.remind: {mode: dry_run}
+  aone.create: {mode: confirm, approver_roles: [coordinator]}
+  aone.add_participant: {mode: auto}
+  aone.transition: {mode: confirm, approver_roles: [coordinator, acceptor]}
+  nm.submit: {mode: confirm, approver_roles: [tester, coordinator]}
+
+budget:
+  max_external_writes_per_day: 200
+  reminders_per_person_per_day: 3
+  quiet_hours: {start: "22:00", end: "08:30"}
+
+leases:
+  op_seconds: 600
+  sync_seconds: 900
+
+sync:
+  default: {overlap_seconds: 600, page_size: 50, reconcile_every_hours: 24, stale_after_hours: 6}
+
+defects:
+  scopes: []              # 需要跟进的 Aone 范围，例如 [proj-x]
+  due_soon_days: 2
+  escalate_after_days: 3

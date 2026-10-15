@@ -1,0 +1,9 @@
+input:
+  requester: m:bob
+  message: "帮我在 main@3f2a9c1 上跑一下 llama-70b 性能回归，P99 不能比基线差 5% 以上"
+expect:
+  yaml:
+    build.id: "git:3f2a9c1"
+  checks_contain:
+    - {metric: p99_ms, op: "<=", baseline: perf-main, tolerance: 0.05}
+  must_validate: TestPlan

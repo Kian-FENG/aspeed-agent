@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "Member": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^m:[A-Za-z0-9_.\\-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "im": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Im"
+        },
+        "aone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aone"
+        },
+        "git_email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Git Email"
+        },
+        "roles": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        },
+        "areas": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Areas",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Member",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "members": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Member"
+      },
+      "title": "Members",
+      "type": "array"
+    }
+  },
+  "title": "Roster",
+  "type": "object"
+}

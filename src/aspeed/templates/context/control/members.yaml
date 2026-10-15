@@ -1,0 +1,12 @@
+# 成员身份映射与角色。由人维护。
+# 角色：coordinator（协调人）、acceptor（验收人）、baseline_approver（基线批准人）、tester
+# 示例：
+# members:
+#   - id: m:alice
+#     name: Alice
+#     im: im:u001
+#     aone: alice.a
+#     git_email: alice@example.com
+#     roles: [coordinator, baseline_approver]
+#     areas: [inference-perf]
+members: []

@@ -1,0 +1,28 @@
+# 接入配置示例。通过 --adapters 或 ASPEED_ADAPTERS 指定；未配置的项默认使用 Fake。
+#
+# 脚本直调模式：为已有 SKILL 写一个满足 aspeed.adapters.script 协议（JSON 进、JSON 出）的薄脚本，
+# 然后先用契约测试核验：
+#   aspeed --adapters config/adapters.yaml contract run aone --scope <沙箱项目>
+#
+# capabilities 声明该接入支持的能力，执行器据此决定是否降级：
+#   aone: incremental / conditional_update / op_marker / participants / query_result
+#   缺少 conditional_update 时，aone.transition 自动降级为 needs_human（建议 + 人工执行）。
+
+aone:
+  impl: aspeed.adapters.script:ScriptAone
+  options:
+    command: "python bridges/aone_bridge.py"
+    timeout: 60
+    capabilities: [incremental, conditional_update, op_marker, participants, query_result]
+
+nodemanager:
+  impl: aspeed.adapters.script:ScriptNodeManager
+  options:
+    command: "python bridges/nodemanager_bridge.py"
+    capabilities: [dedupe, cancel, quota, results]
+
+im:
+  impl: aspeed.adapters.fake:FakeIM      # M4 接入
+
+kb:
+  impl: aspeed.adapters.fake:FakeKB      # M4 接入

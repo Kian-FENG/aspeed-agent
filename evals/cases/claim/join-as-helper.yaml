@@ -1,0 +1,11 @@
+input:
+  member: m:dave
+  message: "P99 那个任务我可以帮忙做 profiling"
+  candidates:
+    - {id: P-20261014-7K3Q, title: 推理服务 P99 延迟优化}
+    - {id: P-20261013-AB12, title: 训练集群显存碎片排查}
+expect:
+  json:
+    member: m:dave
+    task: P-20261014-7K3Q
+    role: contributor
